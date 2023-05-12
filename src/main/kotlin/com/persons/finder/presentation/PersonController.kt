@@ -39,6 +39,12 @@ class PersonController(private val personsService: PersonsService, private val l
         // John wants to know who is around his location within a radius of 10km
         // API would be called using John's id and a radius 10km
      */
+    @GetMapping("/{personId}/nearby")
+    fun getPeopleAround(@PathVariable personId: Long, @RequestParam @Valid radius: Double): ResponseEntity<List<Long>> {
+        val response = locationsService.findAround(personId, radius)
+
+        return ResponseEntity.ok(response)
+    }
 
     /*
         TODO GET API to retrieve a person or persons name using their ids
