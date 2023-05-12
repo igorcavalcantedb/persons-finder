@@ -24,10 +24,6 @@ class PersonController(private val personsService: PersonsService, private val l
 
     }
 
-    /*
-        TODO PUT API to update/create someone's location using latitude and longitude
-        (JSON) Body
-     */
     @PutMapping
     fun updateLocation(@RequestBody @Valid updateLocationRequest: UpdateLocationRequest): ResponseEntity<Void> {
 
@@ -38,13 +34,6 @@ class PersonController(private val personsService: PersonsService, private val l
     }
 
 
-    /*
-        TODO GET API to retrieve people around query location with a radius in KM, Use query param for radius.
-        TODO API just return a list of persons ids (JSON)
-        // Example
-        // John wants to know who is around his location within a radius of 10km
-        // API would be called using John's id and a radius 10km
-     */
     @GetMapping("/{personId}/nearby")
     fun getPeopleAround(@PathVariable personId: Long, @RequestParam @Valid radius: Double): ResponseEntity<List<Long>> {
         val response = locationsService.findAround(personId, radius)

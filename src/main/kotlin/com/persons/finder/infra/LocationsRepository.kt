@@ -11,4 +11,11 @@ interface LocationsRepository : JpaRepository<Location, Long> {
 
     @Query("SELECT l FROM Location l WHERE l.person.id != :personId")
     fun findOtherLocations(@Param("personId") personId: Long): List<Location>
+
+    @Query("SELECT l FROM Location l WHERE l.person.id != :personId AND l.latitude BETWEEN :minLatitude AND :maxLatitude")
+    fun findOtherLocations(
+        @Param("personId") personId: Long,
+        @Param("minLatitude") minLatitude: Double,
+        @Param("maxLatitude") maxLatitude: Double
+    ): List<Location>
 }
