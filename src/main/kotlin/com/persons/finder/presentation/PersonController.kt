@@ -1,9 +1,15 @@
 package com.persons.finder.presentation
 
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import com.persons.finder.domain.services.LocationsService
+import com.persons.finder.domain.services.PersonsService
+import com.persons.finder.presentation.dto.CreatePersonRequest
+import com.persons.finder.presentation.dto.PersonResponse
+import com.persons.finder.presentation.dto.UpdateLocationRequest
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.*
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("api/v1/persons") //people
@@ -46,14 +52,18 @@ class PersonController(private val personsService: PersonsService, private val l
         return ResponseEntity.ok(response)
     }
 
-    /*
-        TODO GET API to retrieve a person or persons name using their ids
-        // Example
-        // John has the list of people around them, now they need to retrieve everybody's names to display in the app
-        // API would be called using person or persons ids
-     */
 
-    @GetMapping("")
+    @GetMapping
+    fun getPersonsNames(@RequestParam ids: List<Long>): ResponseEntity<List<String>> {
+        val names = mutableListOf<String>()
+        for (id in ids) {
+            val person = personsService.getById(id)
+            names.add(person.name)
+        }
+        return ResponseEntity.ok(names)
+    }
+
+    @GetMapping("/Example")
     fun getExample(): String {
         return "Hello Example"
     }
