@@ -6,8 +6,17 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("api/v1/persons")
-class PersonController @Autowired constructor() {
+@RequestMapping("api/v1/persons") //people
+@Validated
+class PersonController(private val personsService: PersonsService, private val locationsService: LocationsService) {
+
+   @PostMapping
+    fun createPerson(@RequestBody @Valid createPersonRequest: CreatePersonRequest): ResponseEntity<PersonResponse> {
+        val newPerson = personsService.save(createPersonRequest.toDomain())
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(PersonResponse.fromDomain(newPerson))
+
+    }
 
     /*
         TODO PUT API to update/create someone's location using latitude and longitude
