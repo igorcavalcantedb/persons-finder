@@ -22,11 +22,15 @@ class PersonController(private val personsService: PersonsService, private val l
         TODO PUT API to update/create someone's location using latitude and longitude
         (JSON) Body
      */
+    @PutMapping
+    fun updateLocation(@RequestBody @Valid updateLocationRequest: UpdateLocationRequest): ResponseEntity<Void> {
 
-    /*
-        TODO POST API to create a 'person'
-        (JSON) Body and return the id of the created entity
-    */
+        locationsService.addLocation(updateLocationRequest.toDomain())
+
+        return ResponseEntity.noContent().build()
+
+    }
+
 
     /*
         TODO GET API to retrieve people around query location with a radius in KM, Use query param for radius.
