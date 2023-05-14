@@ -1,27 +1,19 @@
-# Welcome
+#Welcome
+- The documentation for the APIs is available in Swagger UI, which can be accessed at /swagger-ui/index.html.
 
-This is a start-up Git repo for a project we are calling 'Persons finder'.
+The project is a Kotlin Spring Boot application that provides REST APIs to create and retrieve information about people. It provides the following APIs:
 
-Your job is to create a set of API's that will feed a mobile application that has one purpose: find people around you.
-
-Requirements:
-- POST API to create a 'person'
+- POST API to create a person
 - PUT API to update/create someone's location using latitude and longitude
-- GET API to retrieve people around query location with a radius in KM, Use query param for radius. Extra challenge: Return list ordered by distance to each person.
-- GET API to retrieve a person or persons name using their ids
-- Responses must follow a JSON format
+- GET API to retrieve people around a query location with a specified radius in KM. The API returns a list of people ordered by their distance to the query location.
+- GET API to retrieve a person's name or names using their ids
 
-You'll also need to build the logic and services for saving/retrieving locations and persons.
+ The project uses the following technologies:
 
-Steps:
-- Clone the project
-- Implement required API's and services
-- Push your project to your personal github
+- Kotlin programming language
+- Spring Boot 2.7
 
 
-### Extra challenge
-### Add a million, 10 million and 100 million entries and challenge your API's efficiency 
 
-For any questions, please reach out on: leo@getsquareone.app
 
 
