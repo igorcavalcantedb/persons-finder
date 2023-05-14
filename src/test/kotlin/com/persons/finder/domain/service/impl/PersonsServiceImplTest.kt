@@ -3,7 +3,7 @@ package com.persons.finder.domain.service.impl
 import com.persons.finder.domain.model.Person
 import com.persons.finder.domain.services.PersonsService
 import com.persons.finder.domain.services.impl.PersonsServiceImpl
-import com.persons.finder.infra.PersonRepository
+import com.persons.finder.repository.PersonRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

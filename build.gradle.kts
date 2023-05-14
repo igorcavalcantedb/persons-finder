@@ -22,6 +22,7 @@ dependencies {
 	implementation("com.h2database:h2:2.1.212")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
+	implementation("io.springfox:springfox-boot-starter:3.0.0")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
