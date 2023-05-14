@@ -3,13 +3,14 @@ package com.persons.finder.domain.model
 import javax.persistence.*
 
 @Entity
+@Table(indexes = [Index(name = "idx_latitude", columnList = "latitude")])
 class Location(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
     val latitude: Double,
     val longitude: Double,
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "person_id", referencedColumnName = "id", unique = true)
     val person: Person? = null
 ) {
