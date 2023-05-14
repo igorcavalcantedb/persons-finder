@@ -1,5 +1,6 @@
 package com.persons.finder.config
 
+import com.persons.finder.exceptions.PersonNotFoundException
 import com.persons.finder.presentation.dto.ErrorResponse
 import com.persons.finder.presentation.dto.ValidationErrorDto
 import com.persons.finder.presentation.dto.ValidationErrorDtoList
@@ -22,7 +23,6 @@ class RestResponseEntityExceptionHandler {
                 message = error.defaultMessage ?: "Invalid value"
             )
         }
-
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ValidationErrorDtoList(errors))
     }
 
@@ -37,5 +37,12 @@ class RestResponseEntityExceptionHandler {
         val errorResponse = ErrorResponse(ex.message ?: "Invalid input parameter", HttpStatus.BAD_REQUEST.value())
         return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
     }
+
+    @ExceptionHandler(PersonNotFoundException::class)
+    fun handleMethodPersonNotFoundException(ex: PersonNotFoundException): ResponseEntity<Any> {
+        val errorResponse = ErrorResponse(ex.message ?: "Person not found", HttpStatus.NOT_FOUND.value())
+        return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
+    }
+
 
 }
