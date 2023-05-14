@@ -5,13 +5,15 @@ import javax.persistence.*
 class Person(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null, // usar um UUID ?? talvez melhor colocar uma nova coluna com UUID
+    var id: Long? = null,
     @Column(nullable = false)
     var name: String ="",
     @Column(nullable = false, unique = true)
-    var email: String =""
+    var email: String ="",
+
 
 
 ){
     constructor():this(null,"","")
+    constructor(id: Long?):this(id,"","")
 }

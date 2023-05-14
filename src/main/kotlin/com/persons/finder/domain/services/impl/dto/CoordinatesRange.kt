@@ -1,6 +1,6 @@
 package com.persons.finder.domain.services.impl.dto
 
-data class LatitudeRange(var min: Double, var max: Double) {
+data class CoordinatesRange(var min: Double, var max: Double) {
     init {
         if (min > max) {
             val temp = max

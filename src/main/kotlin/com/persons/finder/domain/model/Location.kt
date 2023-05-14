@@ -6,16 +6,15 @@ import javax.persistence.*
 class Location(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long?= null,
-    @Column(nullable = false)
-    val latitude: Double=0.0,
-    @Column(nullable = false)
-    val longitude: Double=0.0,
+    var id: Long? = null,
+    val latitude: Double,
+    val longitude: Double,
     @OneToOne
-    @JoinColumn(name = "person_id")
+    @JoinColumn(name = "person_id", referencedColumnName = "id", unique = true)
     val person: Person? = null
+) {
+    constructor() : this(null, 0.0, 0.0, null)
+    constructor(latitude: Double, longitude: Double) : this(null, latitude, longitude, null)
+    constructor(latitude: Double, longitude: Double, person: Person) : this(null, latitude, longitude, person)
 
-    //validar se precisa usar @field nas validações
-){
-    constructor() : this(null,0.0,0.0,null)
 }
