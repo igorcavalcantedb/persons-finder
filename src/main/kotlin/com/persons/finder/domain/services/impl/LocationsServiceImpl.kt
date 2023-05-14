@@ -2,7 +2,7 @@ package com.persons.finder.domain.services.impl
 
 import com.persons.finder.domain.model.Location
 import com.persons.finder.domain.services.LocationsService
-import com.persons.finder.domain.services.impl.dto.LatitudeRange
+import com.persons.finder.domain.services.impl.dto.CoordinatesRange
 import com.persons.finder.infra.LocationsRepository
 import org.springframework.stereotype.Service
 import kotlin.math.atan2
@@ -19,22 +19,48 @@ class LocationsServiceImpl(private val locationsRepository: LocationsRepository)
     }
 
     override fun addLocation(location: Location) {
-        locationsRepository.save(location);
+        location.person?.id?.let { personId ->
+            val oldLocation = locationsRepository.findByPersonId(personId)
+            if (oldLocation.isPresent) {
+                location.id = oldLocation.get().id
+                locationsRepository.save(location)
+            } else locationsRepository.save(location)
+        } ?: throw IllegalArgumentException("The location must have a reference to a valid person")
     }
 
     override fun removeLocation(locationReferenceId: Long) {
-        TODO("Not yet implemented")
+        locationsRepository.deleteById(locationReferenceId)
     }
 
+
     override fun findAround(latitude: Double, longitude: Double, radiusInKm: Double): List<Location> {
-        TODO("Not yet implemented")
+        val personLocation = Location(latitude, longitude)
+        val latitudeRange = calculateRange(personLocation.latitude, radiusInKm)
+        val othersLocations = locationsRepository.findLocationsWithRangeExcludingLocation(
+            latitude,
+            longitude,
+            latitudeRange.min,
+            latitudeRange.max
+        )
+        return othersLocations
+            .map { otherLocation -> Pair(otherLocation, calculateDistanceInKm(personLocation, otherLocation)) }
+            .filter { (_, distance) -> distance <= radiusInKm }
+            .sortedBy { (_, distance) -> distance }
+            .map { (location, _) -> location }
+
     }
 
     override fun findAround(personId: Long, radiusInKm: Double): List<Long> {
-        val personLocation = locationsRepository.findByPersonId(personId)
-            ?: throw IllegalArgumentException("Could not find location for person with ID $personId")
+        val personLocation = locationsRepository.findByPersonId(personId).orElseThrow {
+            IllegalArgumentException("Could not find location for person with ID $personId")
+        }
         val latitudeRange = calculateRange(personLocation.latitude, radiusInKm)
-        val otherLocations = locationsRepository.findOtherLocations(personId, latitudeRange.min,latitudeRange.max)
+        val otherLocations = locationsRepository.findLocationsWithinLatitudeRangeExcludingPersonId(
+            personId,
+            latitudeRange.min,
+            latitudeRange.max
+        )
+
         val locationDistances = otherLocations.map { location ->
             Pair(location, calculateDistanceInKm(personLocation, location))
         }
@@ -46,12 +72,12 @@ class LocationsServiceImpl(private val locationsRepository: LocationsRepository)
         return sortedLocations.map { it.first.person!!.id!! }
     }
 
-    private fun calculateRange(latitude: Double, rangeInKm: Double): LatitudeRange {
-        val latitudeRange = rangeInKm / Companion.AVG_KM_PER_LATITUDE_DEGREE;
-        var latitudeMax = latitude - latitudeRange;
-        var latitudeMin = latitude + latitudeRange;
+    private fun calculateRange(latitude: Double, rangeInKm: Double): CoordinatesRange {
+        val latitudeRange = rangeInKm / AVG_KM_PER_LATITUDE_DEGREE
+        val latitudeMax = latitude - latitudeRange
+        val latitudeMin = latitude + latitudeRange
 
-        return LatitudeRange(latitudeMin, latitudeMax)
+        return CoordinatesRange(latitudeMin, latitudeMax)
     }
 
     private fun calculateDistanceInKm(personLocation: Location, otherLocation: Location): Double {
