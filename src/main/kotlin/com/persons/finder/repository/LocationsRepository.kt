@@ -7,13 +7,13 @@ import org.springframework.data.repository.query.Param
 import java.util.*
 
 interface LocationsRepository : JpaRepository<Location, Long> {
-    @Query("SELECT l FROM Location l WHERE l.person.id = :personId")
+    @Query("SELECT l FROM Location l WHERE l.personId = :personId")
     fun findByPersonId(@Param("personId") personId: Long): Optional<Location>
 
-    @Query("SELECT l FROM Location l WHERE l.person.id != :personId")
+    @Query("SELECT l FROM Location l WHERE l.personId != :personId")
     fun findOtherLocations(@Param("personId") personId: Long): List<Location>
 
-    @Query("SELECT l FROM Location l WHERE l.person.id != :personId AND l.latitude BETWEEN :minLatitude AND :maxLatitude")
+    @Query("SELECT l FROM Location l WHERE l.personId != :personId AND l.latitude BETWEEN :minLatitude AND :maxLatitude")
     fun findLocationsWithinLatitudeRangeExcludingPersonId(
         @Param("personId") personId: Long,
         @Param("minLatitude") minLatitude: Double,
@@ -28,7 +28,7 @@ interface LocationsRepository : JpaRepository<Location, Long> {
         @Param("maxLatitude") maxLatitude: Double
     ): List<Location>
 
-    @Query("SELECT l FROM Location l WHERE l.person.id != :personId AND l.latitude BETWEEN :minLatitude AND :maxLatitude AND l.longitude BETWEEN :minLongitude AND :maxLongitude")
+    @Query("SELECT l FROM Location l WHERE l.personId != :personId AND l.latitude BETWEEN :minLatitude AND :maxLatitude AND l.longitude BETWEEN :minLongitude AND :maxLongitude")
     fun findLocationsWithinCoordanatesRangeExcludingPersonId(
         @Param("personId") personId: Long,
         @Param("minLatitude") minLatitude: Double,

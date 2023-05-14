@@ -19,13 +19,13 @@ class LocationsServiceImpl(private val locationsRepository: LocationsRepository)
     }
 
     override fun addLocation(location: Location) {
-        location.person?.id?.let { personId ->
+        location.personId.let { personId ->
             val oldLocation = locationsRepository.findByPersonId(personId)
             if (oldLocation.isPresent) {
                 location.id = oldLocation.get().id
                 locationsRepository.save(location)
             } else locationsRepository.save(location)
-        } ?: throw IllegalArgumentException("The location must have a reference to a valid person")
+        }
     }
 
     override fun removeLocation(locationReferenceId: Long) {
@@ -69,7 +69,7 @@ class LocationsServiceImpl(private val locationsRepository: LocationsRepository)
         }
         val sortedLocations = nearbyLocations.sortedBy { it.second }
 
-        return sortedLocations.map { it.first.person!!.id!! }
+        return sortedLocations.map { it.first.personId }
     }
 
     private fun calculateRange(latitude: Double, rangeInKm: Double): CoordinatesRange {

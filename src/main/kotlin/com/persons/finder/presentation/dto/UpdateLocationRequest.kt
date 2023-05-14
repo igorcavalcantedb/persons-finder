@@ -3,7 +3,6 @@ package com.persons.finder.presentation.dto
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.persons.finder.domain.model.Location
-import com.persons.finder.domain.model.Person
 import javax.validation.constraints.*
 
 class UpdateLocationRequest @JsonCreator constructor(
@@ -19,7 +18,7 @@ class UpdateLocationRequest @JsonCreator constructor(
 ) {
 
     fun toDomain(): Location {
-        return Location(null, this.latitude, this.longitude, Person(personId.toLong()))
+        return Location(null, this.latitude, this.longitude, personId.toLong())
     }
 }
 
