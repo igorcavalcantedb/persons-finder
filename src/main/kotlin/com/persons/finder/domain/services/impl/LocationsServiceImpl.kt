@@ -3,7 +3,7 @@ package com.persons.finder.domain.services.impl
 import com.persons.finder.domain.model.Location
 import com.persons.finder.domain.services.LocationsService
 import com.persons.finder.domain.services.impl.dto.CoordinatesRange
-import com.persons.finder.infra.LocationsRepository
+import com.persons.finder.repository.LocationsRepository
 import org.springframework.stereotype.Service
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -64,7 +64,7 @@ class LocationsServiceImpl(private val locationsRepository: LocationsRepository)
         val locationDistances = otherLocations.map { location ->
             Pair(location, calculateDistanceInKm(personLocation, location))
         }
-        val nearbyLocations = locationDistances.filter { (location, distance) ->
+        val nearbyLocations = locationDistances.filter { (_, distance) ->
             distance <= radiusInKm
         }
         val sortedLocations = nearbyLocations.sortedBy { it.second }
@@ -90,7 +90,7 @@ class LocationsServiceImpl(private val locationsRepository: LocationsRepository)
             deltaLongitude / 2
         )
         val c = 2 * atan2(sqrt(a), sqrt(1 - a))
-        return Companion.RADIUS * c
+        return RADIUS * c
 
 
     }

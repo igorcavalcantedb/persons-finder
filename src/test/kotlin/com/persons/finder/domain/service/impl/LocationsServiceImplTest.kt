@@ -3,7 +3,7 @@ package com.persons.finder.domain.service.impl
 import com.persons.finder.domain.model.Location
 import com.persons.finder.domain.model.Person
 import com.persons.finder.domain.services.impl.LocationsServiceImpl
-import com.persons.finder.infra.LocationsRepository
+import com.persons.finder.repository.LocationsRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach

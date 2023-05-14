@@ -1,4 +1,4 @@
-package com.persons.finder.infra
+package com.persons.finder.repository
 
 import com.persons.finder.domain.model.Location
 import org.springframework.data.jpa.repository.JpaRepository
