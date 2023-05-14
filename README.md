@@ -1,5 +1,5 @@
 #Welcome
-- The documentation for the APIs is available in Swagger UI, which can be accessed at http://{HOST}:{PORT}/swagger-ui/index.html.
+- The documentation for the APIs is available in Swagger UI, which can be accessed at /swagger-ui/index.html.
 
 The project is a Kotlin Spring Boot application that provides REST APIs to create and retrieve information about people. It provides the following APIs:
 
@@ -12,5 +12,8 @@ The project is a Kotlin Spring Boot application that provides REST APIs to creat
 
 - Kotlin programming language
 - Spring Boot 2.7
+
+
+
 
 

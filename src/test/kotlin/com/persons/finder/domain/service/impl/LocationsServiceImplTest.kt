@@ -1,11 +1,9 @@
 package com.persons.finder.domain.service.impl
 
 import com.persons.finder.domain.model.Location
-import com.persons.finder.domain.model.Person
 import com.persons.finder.domain.services.impl.LocationsServiceImpl
 import com.persons.finder.repository.LocationsRepository
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mock
@@ -28,8 +26,8 @@ class LocationsServiceImplTest {
     @Test
     fun `should update a location`() {
         val personId = 1L
-        val location = Location(null, 37.7749, -122.4194, person = Person(personId))
-        val oldLocation = Location(id = 1L, 36.7749, -152.4195, person = Person(personId))
+        val location = Location(37.7749, -122.4194, personId)
+        val oldLocation = Location(id = 1L, 36.7749, -152.4195, personId = personId)
 
         doReturn(Optional.of(oldLocation)).`when`(locationsRepository).findByPersonId(personId)
         doReturn(location).`when`(locationsRepository).save(location)
@@ -40,13 +38,6 @@ class LocationsServiceImplTest {
         verify(locationsRepository).save(location)
     }
 
-    @Test
-    fun `should not add a location without a valid person reference`() {
-        val location = Location(1.0, 2.0)
-        assertThrows(IllegalArgumentException::class.java) {
-            locationsService.addLocation(location)
-        }
-    }
 
     @Test
     fun `should remove a location`() {
@@ -91,11 +82,11 @@ class LocationsServiceImplTest {
     }
 
     private fun createLocations(): List<Location> {
-        val location1 = Location(1L, -37.0082476, 174.7824609, person = Person(1, "AKL"))
-        val location2 = Location(2L, -36.8485, 174.7633, person = Person(2, "Sky Tower"))
-        val location3 = Location(3L, -36.8252, 174.7503, person = Person(3, "Auckland Harbour Bridge"))
-        val location4 = Location(4L, -36.8531, 174.7667, person = Person(4, "Auckland Art Gallery"))
-        val location5 = Location(5L, -36.8780, 174.7645, person = Person(5, "Mount Eden"))
+        val location1 = Location(1L, -37.0082476, 174.7824609, personId = 1)
+        val location2 = Location(2L, -36.8485, 174.7633, personId = 2L)
+        val location3 = Location(3L, -36.8252, 174.7503, personId = 3)
+        val location4 = Location(4L, -36.8531, 174.7667, personId = 4)
+        val location5 = Location(5L, -36.8780, 174.7645, personId = 5)
         return listOf(location1, location2, location3, location4, location5)
     }
 
