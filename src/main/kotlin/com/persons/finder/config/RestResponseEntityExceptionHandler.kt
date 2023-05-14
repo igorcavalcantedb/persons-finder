@@ -4,7 +4,6 @@ import com.persons.finder.presentation.dto.ErrorResponse
 import com.persons.finder.presentation.dto.ValidationErrorDto
 import com.persons.finder.presentation.dto.ValidationErrorDtoList
 import org.hibernate.exception.ConstraintViolationException
-import org.springframework.data.crossstore.ChangeSetPersister
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.FieldError
@@ -27,17 +26,16 @@ class RestResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ValidationErrorDtoList(errors))
     }
 
-    @ExceptionHandler(ConstraintViolationException::class)
-    fun handleMethodArgumentNotValidException(ex: ConstraintViolationException): ResponseEntity<String> {
-
-        //todo improve error messages
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.message)
-    }
-
-    @ExceptionHandler(value = [(ChangeSetPersister.NotFoundException::class)])
-    fun handleNotFoundException(ex: ChangeSetPersister.NotFoundException): ResponseEntity<Any> {
+    @ExceptionHandler(org.hibernate.exception.ConstraintViolationException::class)
+    fun constraintViolationException(ex: ConstraintViolationException): ResponseEntity<Any> {
         val errorResponse = ErrorResponse(ex.message ?: "Resource not found", HttpStatus.NOT_FOUND.value())
         return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
+    }
+
+    @ExceptionHandler(javax.validation.ConstraintViolationException::class)
+    fun constraintJavaxViolationException(ex: javax.validation.ConstraintViolationException): ResponseEntity<Any> {
+        val errorResponse = ErrorResponse(ex.message ?: "Invalid input parameter", HttpStatus.BAD_REQUEST.value())
+        return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
     }
 
 }
