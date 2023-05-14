@@ -28,8 +28,8 @@ class RestResponseEntityExceptionHandler {
 
     @ExceptionHandler(org.hibernate.exception.ConstraintViolationException::class)
     fun constraintViolationException(ex: ConstraintViolationException): ResponseEntity<Any> {
-        val errorResponse = ErrorResponse(ex.message ?: "Resource not found", HttpStatus.NOT_FOUND.value())
-        return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
+        val errorResponse = ErrorResponse("Invalid input parameter", HttpStatus.BAD_REQUEST.value())
+        return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
     }
 
     @ExceptionHandler(javax.validation.ConstraintViolationException::class)
@@ -43,6 +43,5 @@ class RestResponseEntityExceptionHandler {
         val errorResponse = ErrorResponse(ex.message ?: "Person not found", HttpStatus.NOT_FOUND.value())
         return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
     }
-
 
 }

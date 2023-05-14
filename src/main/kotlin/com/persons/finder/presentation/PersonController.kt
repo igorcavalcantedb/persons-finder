@@ -2,6 +2,7 @@ package com.persons.finder.presentation
 
 import com.persons.finder.domain.services.LocationsService
 import com.persons.finder.domain.services.PersonsService
+import com.persons.finder.exceptions.PersonNotFoundException
 import com.persons.finder.presentation.dto.*
 import io.swagger.annotations.*
 import org.springframework.http.HttpStatus
@@ -42,7 +43,10 @@ class PersonController(private val personsService: PersonsService, private val l
         ]
     )
     fun updateLocation(@RequestBody @Valid updateLocationRequest: UpdateLocationRequest): ResponseEntity<Void> {
-        locationsService.addLocation(updateLocationRequest.toDomain())
+        val location = updateLocationRequest.toDomain()
+        location.person?.id?.let { id -> personsService.getById(id) }
+            ?: throw PersonNotFoundException("Person not found.")
+        locationsService.addLocation(location)
 
         return ResponseEntity.noContent().build()
 
